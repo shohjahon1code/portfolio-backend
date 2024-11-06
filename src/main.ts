@@ -38,7 +38,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new TransformResponseInterceptor())
 
   const swagger_config = new DocumentBuilder()
-    .setTitle('UzChesse API')
+    .setTitle('Portfolio API')
     .setVersion('1.0')
     .addBearerAuth()
     .build()
