@@ -15,7 +15,7 @@ export class CategoryService {
   ) {}
 
   async getAll() {
-    return this.categoryModel.find
+    return this.categoryModel.find()
   }
 
   async get(id: string) {
