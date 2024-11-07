@@ -84,7 +84,7 @@ export class AuthController {
     const code = req.query.code
 
     // Access token olish
-    const accessTokenResponse = await axios.post(
+    const access_token_response = await axios.post(
       'https://github.com/login/oauth/access_token',
       {
         client_id: process.env.GITHUB_CLIENT_ID,
@@ -98,15 +98,15 @@ export class AuthController {
       },
     )
 
-    const accessToken = accessTokenResponse.data.access_token
+    const access_token = access_token_response.data.access_token
 
-    const profileResponse = await axios.get('https://api.github.com/user', {
+    const profile_response = await axios.get('https://api.github.com/user', {
       headers: {
-        Authorization: `token ${accessToken}`,
+        Authorization: `token ${access_token}`,
       },
     })
 
-    const profile = profileResponse.data
+    const profile = profile_response.data
 
     const user = await this.authService.validateUser(profile)
     return { message: 'GitHub login successful', user }

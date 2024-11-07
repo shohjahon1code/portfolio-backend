@@ -29,7 +29,7 @@ export class AuthService {
   }
 
   async validateUser(profile: GitHubProfile) {
-    const { id, username, displayName, emails } = profile
+    const { id, username, display_name, emails } = profile
 
     const email = emails[0]?.value
     let user = await this.getUserByEmail(email)
@@ -38,7 +38,7 @@ export class AuthService {
       user = await this.userModel.create({
         github: id,
         username,
-        displayName,
+        display_name,
         email,
       })
     }

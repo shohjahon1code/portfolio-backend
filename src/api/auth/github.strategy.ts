@@ -8,7 +8,7 @@ import { AuthService } from './auth.service'
 export interface GitHubProfile {
   id: number
   username: string
-  displayName: string
+  display_name: string
   photos: { value: string }[]
   emails: { value: string }[]
 }
@@ -28,11 +28,11 @@ export class GitHubStrategy extends PassportStrategy(Strategy, 'github') {
   }
 
   async validate(access_token: string, profile: GitHubProfile) {
-    const { id, username, displayName, photos, emails } = profile
+    const { id, username, display_name, photos, emails } = profile
     const user = await this.authService.validateUser({
       id,
       username,
-      displayName,
+      display_name,
       photos,
       emails,
     })

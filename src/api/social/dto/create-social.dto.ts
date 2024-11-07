@@ -1,14 +1,16 @@
 import { IsOptional, IsString } from 'class-validator'
 
-export class CreateCategoryDTO {
+export class CreateSocialDTO {
   @IsString()
   name: string
 
   @IsString()
   @IsOptional()
-  description: string
+  label: string
 
   @IsString()
-  @IsOptional()
-  image: string
+  placeholder: string
+
+  @IsString()
+  icon: string
 }
