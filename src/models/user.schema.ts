@@ -21,6 +21,15 @@ class WorkHistory {
   end_date: Date
 }
 
+@Schema()
+class Social {
+  @Prop()
+  name: string
+
+  @Prop()
+  link: string
+}
+
 @Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class User {
   @Prop()
@@ -50,8 +59,8 @@ export class User {
   @Prop({ type: [WorkHistory] })
   work_history?: WorkHistory[]
 
-  @Prop({ type: Types.ObjectId, ref: 'Social' })
-  social_url?: Types.ObjectId
+  @Prop({ type: [Social] })
+  social_url?: Social
 
   @Prop({ default: false })
   is_deleted?: boolean
