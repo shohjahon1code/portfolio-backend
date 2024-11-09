@@ -1,11 +1,5 @@
 import { Type } from 'class-transformer'
-import {
-  IsArray,
-  IsDate,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator'
+import { IsArray, IsOptional, IsString, ValidateNested } from 'class-validator'
 
 class WorkHistory {
   @IsString()
@@ -20,30 +14,26 @@ class WorkHistory {
   @IsOptional()
   role: string
 
-  @IsDate()
+  @IsString()
   @IsOptional()
   @Type(() => Date)
   start_date: string
 
-  @IsDate()
+  @IsString()
   @IsOptional()
   @Type(() => Date)
   end_date: Date
 }
 
-// class Social {
-//   @IsString()
-//   @IsOptional()
-//   name: string
+class Social {
+  @IsString()
+  @IsOptional()
+  name: string
 
-//   @IsString()
-//   @IsOptional()
-//   link: string
-
-//   @IsString()
-//   @IsOptional()
-//   icon: string
-// }
+  @IsString()
+  @IsOptional()
+  link: string
+}
 
 export class UpdateProfileDTO {
   @IsString()
@@ -78,5 +68,11 @@ export class UpdateProfileDTO {
   @IsOptional()
   @ValidateNested()
   @Type(() => WorkHistory)
-  work_history: WorkHistory
+  work_history: WorkHistory[]
+
+  @IsArray()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => Social)
+  social_url: Social[]
 }
