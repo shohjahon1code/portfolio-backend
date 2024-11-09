@@ -16,12 +16,10 @@ class WorkHistory {
 
   @IsString()
   @IsOptional()
-  @Type(() => Date)
   start_date: string
 
   @IsString()
   @IsOptional()
-  @Type(() => Date)
   end_date: Date
 }
 

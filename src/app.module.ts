@@ -7,9 +7,9 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { AuthGuard } from './api/auth/auth.guard'
 import { AuthModule } from './api/auth/auth.module'
 import { CategoryModule } from './api/category/category.module'
+import { PortfolioModule } from './api/portfolio/portfolio.module'
 import { ProfileModule } from './api/profile/profile.module'
 import { SocialModule } from './api/social/social.module'
-import { PortfolioModule } from './api/portfolio/portfolio.module';
 import configuration from './config'
 
 @Module({
