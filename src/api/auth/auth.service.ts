@@ -23,7 +23,7 @@ export class AuthService {
       password: hash_password,
       email,
       name,
-      username
+      username,
     })
 
     return this.jwtService.signAsync({ user: user._id })

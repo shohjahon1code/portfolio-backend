@@ -41,7 +41,7 @@ export class AuthController {
       name,
       email,
       password,
-      username
+      username,
     })
 
     return { data: { access_token } }

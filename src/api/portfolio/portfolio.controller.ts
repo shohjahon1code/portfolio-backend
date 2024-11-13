@@ -1,4 +1,13 @@
-import { Body, Controller, Delete, Get, NotFoundException, Param, Post, Put } from '@nestjs/common'
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common'
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger'
 import { ParseObjectIdPipe } from 'nestjs-object-id'
 
@@ -9,8 +18,8 @@ import { User } from 'src/common/decarators/user.decarator'
 
 import { CreatePortfolioDTO } from './dto/create-portfolio.dto'
 import { PortfolioResponseDTO } from './dto/response-portfolio.dto'
-import { PortfolioService } from './portfolio.service'
 import { UpdatePortfolioDTO } from './dto/update-portfolio.dto'
+import { PortfolioService } from './portfolio.service'
 
 @ApiBearerAuth()
 @ApiTags('Portfolio')
@@ -46,7 +55,7 @@ export class PortfolioController {
     @Body() body: UpdatePortfolioDTO,
     @Param('id', ParseObjectIdPipe) id: string,
   ) {
-    const updated_portfolio = await this.portfolioService.update(id, body )
+    const updated_portfolio = await this.portfolioService.update(id, body)
 
     if (!updated_portfolio) {
       throw new NotFoundException('Category not found')
