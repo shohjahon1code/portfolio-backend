@@ -11,6 +11,7 @@ import { PortfolioModule } from './api/portfolio/portfolio.module'
 import { ProfileModule } from './api/profile/profile.module'
 import { SocialModule } from './api/social/social.module'
 import configuration from './config'
+import { UploadModule } from './api/upload/upload.module'
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import configuration from './config'
     ProfileModule,
     SocialModule,
     PortfolioModule,
+    UploadModule
   ],
   controllers: [],
   providers: [
