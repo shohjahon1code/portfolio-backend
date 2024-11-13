@@ -6,6 +6,9 @@ export class SignUpDTO {
   name: string
 
   @IsString()
+  username: string
+
+  @IsString()
   email?: string
 
   @IsString()

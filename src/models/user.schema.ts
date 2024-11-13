@@ -51,6 +51,12 @@ export class User {
   location?: string
 
   @Prop()
+  role?: string
+
+  @Prop()
+  website_url?: string
+
+  @Prop()
   bio?: string
 
   @Prop({ unique: true })

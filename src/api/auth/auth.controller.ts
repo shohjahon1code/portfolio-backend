@@ -30,7 +30,7 @@ export class AuthController {
   @Public()
   @Post('/signup')
   @ResponseDTO(SignInResponseDTO)
-  async signup(@Body() { name, password, email }: SignUpDTO) {
+  async signup(@Body() { name, password, email, username }: SignUpDTO) {
     const existing_user = await this.authService.getUserByEmail(email)
 
     if (existing_user) {
@@ -41,6 +41,7 @@ export class AuthController {
       name,
       email,
       password,
+      username
     })
 
     return { data: { access_token } }

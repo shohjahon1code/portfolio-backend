@@ -33,7 +33,7 @@ export class CategoryController {
   }
 
   @Get('/:id')
-  @ResponseDTO(CategoryResponseDTO, { isArray: true })
+  @ResponseDTO(CategoryResponseDTO)
   async get(@Param('id', ParseObjectIdPipe) id: string) {
     const category = await this.categoryService.get(id)
 

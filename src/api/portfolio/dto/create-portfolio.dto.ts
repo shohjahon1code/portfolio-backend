@@ -1,8 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Transform } from 'class-transformer'
-import { IsArray, IsNumber, IsString } from 'class-validator'
+import {
+  IsArray,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator'
 import { Types } from 'mongoose'
 import { IsObjectId } from 'nestjs-object-id'
+
+import { PortfolioType } from 'src/models/portfolio.schema'
 
 export class CreatePortfolioDTO {
   @IsString()
@@ -28,4 +36,8 @@ export class CreatePortfolioDTO {
 
   @IsString()
   live_demo: string
+
+  @IsEnum(PortfolioType)
+  @IsOptional()
+  type: PortfolioType
 }

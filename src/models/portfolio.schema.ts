@@ -3,6 +3,10 @@ import { HydratedDocument, Types } from 'mongoose'
 
 export type PortfolioDocument = HydratedDocument<Portfolio>
 
+export enum PortfolioType {
+  FREE = 'free',
+  PAID = 'paid',
+}
 @Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class Portfolio {
   @Prop({ type: Types.ObjectId, ref: 'User' })
@@ -28,6 +32,9 @@ export class Portfolio {
 
   @Prop()
   live_demo: string
+
+  @Prop({ type: String, enum: PortfolioType })
+  type: PortfolioType
 }
 
 export const PortfolioSchema = SchemaFactory.createForClass(Portfolio)
