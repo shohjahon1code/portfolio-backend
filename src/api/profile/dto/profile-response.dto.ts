@@ -55,6 +55,9 @@ export class UserProfileResponseDTO {
   role: string
 
   @Expose()
+  banner: string
+
+  @Expose()
   password: string
 
   @Expose()
