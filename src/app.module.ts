@@ -10,8 +10,8 @@ import { CategoryModule } from './api/category/category.module'
 import { PortfolioModule } from './api/portfolio/portfolio.module'
 import { ProfileModule } from './api/profile/profile.module'
 import { SocialModule } from './api/social/social.module'
-import configuration from './config'
 import { UploadModule } from './api/upload/upload.module'
+import configuration from './config'
 
 @Module({
   imports: [
@@ -43,7 +43,7 @@ import { UploadModule } from './api/upload/upload.module'
     ProfileModule,
     SocialModule,
     PortfolioModule,
-    UploadModule
+    UploadModule,
   ],
   controllers: [],
   providers: [

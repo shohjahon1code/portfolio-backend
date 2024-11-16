@@ -44,11 +44,19 @@ export class UpdateProfileDTO {
 
   @IsString()
   @IsOptional()
+  username: string
+
+  @IsString()
+  @IsOptional()
   password: string
 
   @IsString()
   @IsOptional()
   avatar: string
+
+  @IsString()
+  @IsOptional()
+  banner: string
 
   @IsString()
   @IsOptional()
@@ -60,7 +68,11 @@ export class UpdateProfileDTO {
 
   @IsString()
   @IsOptional()
-  username: string
+  role: string
+
+  @IsString()
+  @IsOptional()
+  website_url: string
 
   @IsArray()
   @IsOptional()
@@ -73,4 +85,12 @@ export class UpdateProfileDTO {
   @ValidateNested()
   @Type(() => Social)
   social_url: Social[]
+}
+
+export class ChangePasswordDTO {
+  @IsString()
+  old_password: string
+
+  @IsString()
+  new_password: string
 }

@@ -16,7 +16,7 @@ import { ResponseDTO } from 'src/common/decarators/response.decarator'
 import { User } from 'src/common/decarators/user.decarator'
 
 import { UserProfileResponseDTO } from './dto/profile-response.dto'
-import { UpdateProfileDTO } from './dto/update-profile.dto'
+import { ChangePasswordDTO, UpdateProfileDTO } from './dto/update-profile.dto'
 import { ProfileService } from './profile.service'
 
 @ApiBearerAuth()
@@ -42,6 +42,20 @@ export class ProfileController {
     const update_profile = await this.profileService.update(user, body)
 
     return { data: update_profile }
+  }
+
+  @Put('/password')
+  async updatePassword(
+    @User() user: UserDocument,
+    @Body() body: ChangePasswordDTO,
+  ) {
+    const update_passowrd = await this.profileService.changePassword(
+      user,
+      body.old_password,
+      body.new_password,
+    )
+
+    return { data: update_passowrd }
   }
 
   @Delete('/:id')

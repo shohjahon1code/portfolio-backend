@@ -62,6 +62,9 @@ export class User {
   @Prop({ unique: true })
   username?: string
 
+  @Prop()
+  banner?: string
+
   @Prop({ type: [WorkHistory] })
   work_history?: WorkHistory[]
 

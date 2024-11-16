@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
+import * as bcrypt from 'bcryptjs'
 import { Model } from 'mongoose'
 
 import { User, UserDocument } from 'src/models/user.schema'
@@ -20,6 +21,16 @@ export class ProfileService {
   }
 
   async update(user: UserDocument, data: UpdateProfileDTO) {
+    if (data.username) {
+      const existing_user = await this.userModel.findOne({
+        username: data.username,
+        _id: { $ne: user._id },
+      })
+
+      if (existing_user) {
+        throw new BadRequestException('Username is already taken')
+      }
+    }
     const update_profile = await this.userModel.findByIdAndUpdate(
       user._id,
       data,
@@ -29,6 +40,35 @@ export class ProfileService {
     )
 
     return update_profile
+  }
+
+  async changePassword(
+    user: UserDocument,
+    old_password: string,
+    new_password: string,
+  ) {
+    const is_password_correct = await bcrypt.compare(
+      old_password,
+      user.password,
+    )
+    if (!is_password_correct) {
+      throw new BadRequestException('Incorrect old password')
+    }
+
+    const salt_rounds = 12
+    const hashed_password = await bcrypt.hash(new_password, salt_rounds)
+
+    const updated_user = await this.userModel.findByIdAndUpdate(
+      user._id,
+      { password: hashed_password },
+      { new: true },
+    )
+
+    if (!updated_user) {
+      throw new BadRequestException('Failed to update the password')
+    }
+
+    return updated_user
   }
 
   async deleteProfile(user_id: string) {
