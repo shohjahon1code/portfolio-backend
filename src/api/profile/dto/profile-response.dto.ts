@@ -49,6 +49,15 @@ export class UserProfileResponseDTO {
   bio: string
 
   @Expose()
+  website_url: string
+
+  @Expose()
+  role: string
+
+  @Expose()
+  password: string
+
+  @Expose()
   @Type(() => WorkHistoryDTO)
   work_history: WorkHistoryDTO[]
 
