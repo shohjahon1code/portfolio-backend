@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { InjectModel } from '@nestjs/mongoose'
 import * as bcrypt from 'bcryptjs'
@@ -18,6 +18,16 @@ export class AuthService {
 
   async signup({ name, password, email, username }: SignUpDTO) {
     const hash_password = await this.hashPassword(password)
+
+    if (username) {
+      const existing_user = await this.userModel.findOne({
+        username: username,
+      })
+
+      if (existing_user) {
+        throw new BadRequestException('Username is already taken')
+      }
+    }
 
     const user = await this.userModel.create({
       password: hash_password,
