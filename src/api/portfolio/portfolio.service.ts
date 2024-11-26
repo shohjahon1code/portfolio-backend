@@ -41,6 +41,15 @@ export class PortfolioService {
       .exec()
   }
 
+  async getUserPortfolios(user: Types.ObjectId) {
+    return this.portfolioModel
+      .find({ user: user._id })
+      .populate('user')
+      .populate('category')
+      .populate('skills')
+      .exec()
+  }
+
   async create(user: Types.ObjectId, data: CreatePortfolioDTO) {
     const new_portfolio = await this.portfolioModel.create({
       user: user,

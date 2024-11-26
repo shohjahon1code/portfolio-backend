@@ -53,6 +53,20 @@ export class PortfolioController {
     return { data: portfolio }
   }
 
+  @Get('/user/me')
+  @ResponseDTO(PortfolioResponseDTO, { isArray: true })
+  async getUserPortfolios(@User() user: UserDocument) {
+    const user_portfolios = await this.portfolioService.getUserPortfolios(
+      user._id,
+    )
+
+    if (!user_portfolios || user_portfolios.length === 0) {
+      throw new NotFoundException('No portfolios found for this user')
+    }
+
+    return { data: user_portfolios }
+  }
+
   @Post('/')
   async create(@Body() body: CreatePortfolioDTO, @User() user: UserDocument) {
     const new_category = await this.portfolioService.create(user._id, body)
