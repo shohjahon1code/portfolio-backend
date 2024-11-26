@@ -33,6 +33,23 @@ class UserDTO {
   bio: string
 }
 
+class SkillDTO {
+  @Expose()
+  name: string
+
+  @Expose()
+  logo: string
+
+  @Expose()
+  category: string
+
+  @Expose()
+  level: string
+
+  @Expose()
+  description: string
+}
+
 export class PortfolioResponseDTO {
   @Expose()
   @Transform(({ obj }) => obj._id)
@@ -63,6 +80,10 @@ export class PortfolioResponseDTO {
 
   @Expose()
   live_demo: string
+
+  @Expose()
+  @Type(() => SkillDTO)
+  skills: SkillDTO[]
 
   @Expose()
   type: string

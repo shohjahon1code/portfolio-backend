@@ -1,16 +1,45 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Transform } from 'class-transformer'
+import { Transform, Type } from 'class-transformer'
 import {
   IsArray,
   IsEnum,
   IsNumber,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator'
 import { Types } from 'mongoose'
 import { IsObjectId } from 'nestjs-object-id'
 
 import { PortfolioType } from 'src/models/portfolio.schema'
+
+// Define a separate class for skills
+export class Skill {
+  @IsString()
+  @ApiProperty({ example: 'React' })
+  name: string
+
+  @IsString()
+  @ApiProperty({
+    example:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+  })
+  logo: string
+
+  @IsString()
+  @ApiProperty({ example: 'Frontend' })
+  category: string
+
+  @IsString()
+  @ApiProperty({ example: 'Expert' })
+  level: string
+
+  @IsString()
+  @ApiProperty({
+    example: 'JavaScript library for building user interfaces',
+  })
+  description: string
+}
 
 export class CreatePortfolioDTO {
   @IsString()
@@ -36,6 +65,11 @@ export class CreatePortfolioDTO {
 
   @IsString()
   live_demo: string
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => Skill) // Required for class-transformer to deserialize objects
+  skills: Skill[]
 
   @IsEnum(PortfolioType)
   @IsOptional()

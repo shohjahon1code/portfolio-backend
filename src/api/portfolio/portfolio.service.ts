@@ -19,6 +19,16 @@ export class PortfolioService {
       .find()
       .populate('user')
       .populate('category')
+      .populate('skills')
+      .exec()
+  }
+
+  async getAllPortfolios() {
+    return this.portfolioModel
+      .find()
+      .populate('user')
+      .populate('category')
+      .populate('skills')
       .exec()
   }
 
@@ -27,6 +37,7 @@ export class PortfolioService {
       .findById(id)
       .populate('user')
       .populate('category')
+      .populate('skills')
       .exec()
   }
 

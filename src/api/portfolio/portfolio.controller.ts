@@ -16,6 +16,7 @@ import { UserDocument } from 'src/models/user.schema'
 import { ResponseDTO } from 'src/common/decarators/response.decarator'
 import { User } from 'src/common/decarators/user.decarator'
 
+import { Public } from '../../common/decarators/public.decarator'
 import { CreatePortfolioDTO } from './dto/create-portfolio.dto'
 import { PortfolioResponseDTO } from './dto/response-portfolio.dto'
 import { UpdatePortfolioDTO } from './dto/update-portfolio.dto'
@@ -31,6 +32,15 @@ export class PortfolioController {
   @ResponseDTO(PortfolioResponseDTO, { isArray: true })
   async getAll() {
     const portfolio = await this.portfolioService.getAll()
+
+    return { data: portfolio }
+  }
+
+  @Public()
+  @Get('/all-portfolios')
+  @ResponseDTO(PortfolioResponseDTO, { isArray: true })
+  async getAllPortfolio() {
+    const portfolio = await this.portfolioService.getAllPortfolios()
 
     return { data: portfolio }
   }

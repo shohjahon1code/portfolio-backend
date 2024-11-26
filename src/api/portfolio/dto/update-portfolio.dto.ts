@@ -1,16 +1,44 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { Transform } from 'class-transformer'
+import { Transform, Type } from 'class-transformer'
 import {
   IsArray,
   IsEnum,
   IsNumber,
   IsOptional,
   IsString,
+  ValidateNested,
 } from 'class-validator'
 import { Types } from 'mongoose'
 import { IsObjectId } from 'nestjs-object-id'
 
 import { PortfolioType } from 'src/models/portfolio.schema'
+
+class SkillDTO {
+  @IsString()
+  @ApiProperty({ example: 'React' })
+  name: string
+
+  @IsString()
+  @ApiProperty({
+    example:
+      'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg',
+  })
+  logo: string
+
+  @IsString()
+  @ApiProperty({ example: 'Frontend' })
+  category: string
+
+  @IsString()
+  @ApiProperty({ example: 'Expert' })
+  level: string
+
+  @IsString()
+  @ApiProperty({
+    example: 'JavaScript library for building user interfaces',
+  })
+  description: string
+}
 
 export class UpdatePortfolioDTO {
   @IsString()
@@ -43,6 +71,12 @@ export class UpdatePortfolioDTO {
   @IsString()
   @IsOptional()
   live_demo: string
+
+  @IsArray()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => SkillDTO)
+  skills: SkillDTO[]
 
   @IsEnum(PortfolioType)
   @IsOptional()

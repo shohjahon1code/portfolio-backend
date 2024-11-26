@@ -7,6 +7,24 @@ export enum PortfolioType {
   FREE = 'free',
   PAID = 'paid',
 }
+
+export class Skill {
+  @Prop()
+  name: string
+
+  @Prop()
+  logo: string
+
+  @Prop()
+  category: string
+
+  @Prop()
+  level: string
+
+  @Prop()
+  description: string
+}
+
 @Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class Portfolio {
   @Prop({ type: Types.ObjectId, ref: 'User' })
@@ -35,6 +53,19 @@ export class Portfolio {
 
   @Prop({ type: String, enum: PortfolioType })
   type: PortfolioType
+
+  @Prop({
+    type: [
+      {
+        name: String,
+        logo: String,
+        category: String,
+        level: String,
+        description: String,
+      },
+    ],
+  })
+  skills: Skill[]
 }
 
 export const PortfolioSchema = SchemaFactory.createForClass(Portfolio)
