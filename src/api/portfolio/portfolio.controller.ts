@@ -57,6 +57,44 @@ export class PortfolioController {
     return { data: favorites }
   }
 
+  @Post('/favorites/:id')
+  async toggleFavorite(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @User() user: UserDocument,
+  ) {
+    const updated_portfolio = await this.portfolioService.toggleFavorite(
+      id,
+      user._id,
+    )
+
+    return { data: updated_portfolio }
+  }
+
+  @Get('/likes')
+  @ResponseDTO(PortfolioResponseDTO, { isArray: true })
+  async getUserLikes(@User() user: UserDocument) {
+    const likes = await this.portfolioService.getUserLikes(user._id)
+
+    if (!likes || likes.length === 0) {
+      throw new NotFoundException('No liked portfolios found')
+    }
+
+    return { data: likes }
+  }
+
+  @Post('/likes/:id')
+  async toggleLike(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @User() user: UserDocument,
+  ) {
+    const updated_portfolio = await this.portfolioService.toggleLike(
+      id,
+      user._id,
+    )
+
+    return { data: updated_portfolio }
+  }
+
   @Get('/:id')
   @ResponseDTO(PortfolioResponseDTO)
   async get(@Param('id', ParseObjectIdPipe) id: string) {
@@ -94,7 +132,7 @@ export class PortfolioController {
     const updated_portfolio = await this.portfolioService.update(id, body)
 
     if (!updated_portfolio) {
-      throw new NotFoundException('Category not found')
+      throw new NotFoundException('Portfolio not found')
     }
 
     return { data: updated_portfolio }
@@ -105,18 +143,5 @@ export class PortfolioController {
     await this.portfolioService.delete(id)
 
     return { data: null }
-  }
-
-  @Post('/favorites/:id')
-  async toggleFavorite(
-    @Param('id', ParseObjectIdPipe) id: string,
-    @User() user: UserDocument,
-  ) {
-    const updated_portfolio = await this.portfolioService.toggleFavorite(
-      id,
-      user._id,
-    )
-
-    return { data: updated_portfolio }
   }
 }

@@ -77,7 +77,7 @@ export class PortfolioService {
 
   async getUserFavorites(user: Types.ObjectId) {
     return this.portfolioModel
-      .find({ user: user })
+      .find({ favoritedBy: user })
       .populate('user')
       .populate('category')
       .populate('skills')
@@ -102,6 +102,63 @@ export class PortfolioService {
     }
 
     await portfolio.save()
+
+    return portfolio
+  }
+
+  async getUserLikes(user: Types.ObjectId) {
+    return this.portfolioModel
+      .find({ likedBy: user._id })
+      .populate('user')
+      .populate('category')
+      .populate('skills')
+      .exec()
+  }
+
+  async toggleLike(portfolioId: string, user: Types.ObjectId) {
+    const portfolio = await this.portfolioModel.findById(portfolioId)
+
+    if (!portfolio) {
+      throw new Error('Portfolio not found')
+    }
+
+    const is_liked = portfolio.likedBy?.includes(user._id)
+
+    if (is_liked) {
+      portfolio.likedBy = portfolio.likedBy.filter((id) => !id.equals(user._id))
+      portfolio.likesCount = (portfolio.likesCount || 1) - 1
+    } else {
+      portfolio.likedBy.push(user._id)
+      portfolio.likesCount = (portfolio.likesCount || 0) + 1
+    }
+
+    await portfolio.save()
+
+    return portfolio
+  }
+
+  async incrementLikes(portfolioId: string) {
+    const portfolio = await this.portfolioModel.findByIdAndUpdate(
+      portfolioId,
+      { $inc: { likesCount: 1 } },
+      { new: true },
+    )
+    if (!portfolio) {
+      throw new Error('Portfolio not found')
+    }
+
+    return portfolio
+  }
+
+  async decrementLikes(portfolioId: string) {
+    const portfolio = await this.portfolioModel.findByIdAndUpdate(
+      portfolioId,
+      { $inc: { likesCount: -1 } },
+      { new: true },
+    )
+    if (!portfolio) {
+      throw new Error('Portfolio not found')
+    }
 
     return portfolio
   }
