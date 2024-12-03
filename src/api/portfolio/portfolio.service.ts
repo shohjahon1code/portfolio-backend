@@ -77,15 +77,15 @@ export class PortfolioService {
 
   async getUserFavorites(user: Types.ObjectId) {
     return this.portfolioModel
-      .find({ favoritedBy: user })
+      .find({ favorited_by: user })
       .populate('user')
       .populate('category')
       .populate('skills')
       .exec()
   }
 
-  async toggleFavorite(portfolioId: string, user: Types.ObjectId) {
-    const portfolio = await this.portfolioModel.findById(portfolioId)
+  async toggleFavorite(portfolio_id: string, user: Types.ObjectId) {
+    const portfolio = await this.portfolioModel.findById(portfolio_id)
 
     if (!portfolio) {
       throw new Error('Portfolio not found')
@@ -108,7 +108,7 @@ export class PortfolioService {
 
   async getUserLikes(user: Types.ObjectId) {
     return this.portfolioModel
-      .find({ likedBy: user._id })
+      .find({ liked_by: user._id })
       .populate('user')
       .populate('category')
       .populate('skills')
