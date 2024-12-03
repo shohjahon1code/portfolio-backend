@@ -45,6 +45,18 @@ export class PortfolioController {
     return { data: portfolio }
   }
 
+  @Get('/favorites')
+  @ResponseDTO(PortfolioResponseDTO, { isArray: true })
+  async getUserFavorites(@User() user: UserDocument) {
+    const favorites = await this.portfolioService.getUserFavorites(user._id)
+
+    if (!favorites || favorites.length === 0) {
+      throw new NotFoundException('No favorite portfolios found')
+    }
+
+    return { data: favorites }
+  }
+
   @Get('/:id')
   @ResponseDTO(PortfolioResponseDTO)
   async get(@Param('id', ParseObjectIdPipe) id: string) {
@@ -93,5 +105,18 @@ export class PortfolioController {
     await this.portfolioService.delete(id)
 
     return { data: null }
+  }
+
+  @Post('/favorites/:id')
+  async toggleFavorite(
+    @Param('id', ParseObjectIdPipe) id: string,
+    @User() user: UserDocument,
+  ) {
+    const updated_portfolio = await this.portfolioService.toggleFavorite(
+      id,
+      user._id,
+    )
+
+    return { data: updated_portfolio }
   }
 }

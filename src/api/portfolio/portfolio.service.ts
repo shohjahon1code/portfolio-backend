@@ -74,4 +74,35 @@ export class PortfolioService {
 
     return portfolio
   }
+
+  async getUserFavorites(user: Types.ObjectId) {
+    return this.portfolioModel
+      .find({ user: user })
+      .populate('user')
+      .populate('category')
+      .populate('skills')
+      .exec()
+  }
+
+  async toggleFavorite(portfolioId: string, user: Types.ObjectId) {
+    const portfolio = await this.portfolioModel.findById(portfolioId)
+
+    if (!portfolio) {
+      throw new Error('Portfolio not found')
+    }
+
+    const is_favorited = portfolio.favoritedBy?.includes(user._id)
+
+    if (is_favorited) {
+      portfolio.favoritedBy = portfolio.favoritedBy.filter(
+        (id) => !id.equals(user._id),
+      )
+    } else {
+      portfolio.favoritedBy.push(user._id)
+    }
+
+    await portfolio.save()
+
+    return portfolio
+  }
 }

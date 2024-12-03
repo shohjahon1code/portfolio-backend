@@ -66,6 +66,9 @@ export class Portfolio {
     ],
   })
   skills: Skill[]
+
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
+  favoritedBy?: Types.ObjectId[]
 }
 
 export const PortfolioSchema = SchemaFactory.createForClass(Portfolio)
