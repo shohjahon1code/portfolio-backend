@@ -115,8 +115,8 @@ export class PortfolioService {
       .exec()
   }
 
-  async toggleLike(portfolioId: string, user: Types.ObjectId) {
-    const portfolio = await this.portfolioModel.findById(portfolioId)
+  async toggleLike(portfolio_id: string, user: Types.ObjectId) {
+    const portfolio = await this.portfolioModel.findById(portfolio_id)
 
     if (!portfolio) {
       throw new Error('Portfolio not found')
@@ -139,9 +139,9 @@ export class PortfolioService {
     return portfolio
   }
 
-  async incrementLikes(portfolioId: string) {
+  async incrementLikes(portfolio_id: string) {
     const portfolio = await this.portfolioModel.findByIdAndUpdate(
-      portfolioId,
+      portfolio_id,
       { $inc: { likesCount: 1 } },
       { new: true },
     )
@@ -152,9 +152,9 @@ export class PortfolioService {
     return portfolio
   }
 
-  async decrementLikes(portfolioId: string) {
+  async decrementLikes(portfolio_id: string) {
     const portfolio = await this.portfolioModel.findByIdAndUpdate(
-      portfolioId,
+      portfolio_id,
       { $inc: { likesCount: -1 } },
       { new: true },
     )
