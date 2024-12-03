@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model, Types } from 'mongoose'
 
@@ -119,7 +119,7 @@ export class PortfolioService {
     const portfolio = await this.portfolioModel.findById(portfolio_id)
 
     if (!portfolio) {
-      throw new Error('Portfolio not found')
+      throw new NotFoundException('Portfolio not found')
     }
 
     const is_liked = portfolio.liked_by?.includes(user._id)
@@ -146,7 +146,7 @@ export class PortfolioService {
       { new: true },
     )
     if (!portfolio) {
-      throw new Error('Portfolio not found')
+      throw new NotFoundException('Portfolio not found')
     }
 
     return portfolio
