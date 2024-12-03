@@ -91,14 +91,14 @@ export class PortfolioService {
       throw new Error('Portfolio not found')
     }
 
-    const is_favorited = portfolio.favoritedBy?.includes(user._id)
+    const is_favorited = portfolio.favorited_by?.includes(user._id)
 
     if (is_favorited) {
-      portfolio.favoritedBy = portfolio.favoritedBy.filter(
+      portfolio.favorited_by = portfolio.favorited_by.filter(
         (id) => !id.equals(user._id),
       )
     } else {
-      portfolio.favoritedBy.push(user._id)
+      portfolio.favorited_by.push(user._id)
     }
 
     await portfolio.save()
@@ -122,14 +122,16 @@ export class PortfolioService {
       throw new Error('Portfolio not found')
     }
 
-    const is_liked = portfolio.likedBy?.includes(user._id)
+    const is_liked = portfolio.liked_by?.includes(user._id)
 
     if (is_liked) {
-      portfolio.likedBy = portfolio.likedBy.filter((id) => !id.equals(user._id))
-      portfolio.likesCount = (portfolio.likesCount || 1) - 1
+      portfolio.liked_by = portfolio.liked_by.filter(
+        (id) => !id.equals(user._id),
+      )
+      portfolio.likes_count = (portfolio.likes_count || 1) - 1
     } else {
-      portfolio.likedBy.push(user._id)
-      portfolio.likesCount = (portfolio.likesCount || 0) + 1
+      portfolio.liked_by.push(user._id)
+      portfolio.likes_count = (portfolio.likes_count || 0) + 1
     }
 
     await portfolio.save()
