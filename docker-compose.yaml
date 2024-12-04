@@ -23,6 +23,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       - mongo-data:/data/db
+      - ./uploads:/usr/src/app/uploads
 
 volumes:
   mongo-data:
