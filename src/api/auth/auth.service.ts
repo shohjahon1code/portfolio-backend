@@ -7,7 +7,7 @@ import { Model, Types } from 'mongoose'
 import { User } from 'src/models/user.schema'
 
 import { SignUpDTO } from './dto/singin.dto'
-import { GitHubProfile } from './github.strategy'
+import { GitHubProfileData } from './github.strategy'
 
 @Injectable()
 export class AuthService {
@@ -39,18 +39,24 @@ export class AuthService {
     return this.jwtService.signAsync({ user: user._id })
   }
 
-  async validateUser(profile: GitHubProfile) {
-    const { id, username, display_name, emails } = profile
+  async validateUser(profile: GitHubProfileData) {
+    const { id, username, display_name, emails, photos } = profile
+    const email = emails?.[0]?.value
+    const avatar = photos?.[0]?.value
 
-    const email = emails[0]?.value
+    if (!email) {
+      throw new BadRequestException('Email is required')
+    }
+
     let user = await this.getUserByEmail(email)
 
     if (!user) {
       user = await this.userModel.create({
         github: id,
         username,
-        display_name,
+        name: display_name || username,
         email,
+        avatar,
       })
     }
 
