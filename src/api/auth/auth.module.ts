@@ -19,7 +19,13 @@ import { GoogleStrategy } from './google.strategy'
     PassportModule.register({ defaultStrategy: ['github', 'google'] }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, SmsService, GitHubStrategy, GoogleStrategy, EmailService],
+  providers: [
+    AuthService,
+    SmsService,
+    GitHubStrategy,
+    GoogleStrategy,
+    EmailService,
+  ],
   exports: [AuthService],
 })
 export class AuthModule {}

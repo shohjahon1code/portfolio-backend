@@ -33,7 +33,7 @@ class Social {
 @Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class User {
   @Prop()
-  name: string
+  name?: string
 
   @Prop()
   email?: string
