@@ -73,7 +73,7 @@ export class AuthController {
   }
 
   @Public()
-  @Get('github/redirect')
+  @Get('github/callback')
   @UseGuards(AuthGuard('github'))
   async githubAuthRedirect(@Req() req: Request, @Res() res: Response) {
     try {
