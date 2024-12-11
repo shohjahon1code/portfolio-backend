@@ -77,6 +77,23 @@ export class AuthService {
     return user
   }
 
+  async signUpGoogle({ fio, email }: { fio: string; email: string }) {
+    let user = await this.getUserByEmail(email)
+
+    if (!user) {
+      user = await this.userModel.create({
+        name: fio,
+        email,
+      })
+    }
+
+    const token = await this.jwtService.signAsync({ user: user._id })
+    
+    return {
+      access_token: token,
+    }
+  }
+
   async hashPassword(password: string) {
     const hash = await bcrypt.hash(password, 12)
 

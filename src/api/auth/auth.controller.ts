@@ -6,18 +6,29 @@ import {
   NotFoundException,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
 import { AuthGuard } from '@nestjs/passport'
 import { ApiTags } from '@nestjs/swagger'
 import axios from 'axios'
+import { Response } from 'express'
 
 import { Public } from 'src/common/decarators/public.decarator'
 import { ResponseDTO } from 'src/common/decarators/response.decarator'
 
 import { AuthService } from './auth.service'
 import { SignInDTO, SignInResponseDTO, SignUpDTO } from './dto/singin.dto'
+import { ConfigService } from '@nestjs/config'
+
+interface ForGoogleRequest extends Request {
+  user?: {
+    firstName: string
+    lastName: string
+    email: string
+  }
+}
 
 @ApiTags('Auth')
 @Controller('/api/auth')
@@ -25,7 +36,34 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
+
+  @Public()
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {}
+
+  @Public()
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(@Req() req: ForGoogleRequest, @Res() res: Response) {
+    try {
+      const front_url = this.configService.get<string>('FRONT_URL')
+
+      const token = await this.authService.signUpGoogle({
+        fio: `${req.user.firstName} ${req.user.lastName}`,
+        email: req.user.email,
+      })
+
+      res.redirect(
+        `${front_url}?access_token=${token.access_token}`,
+      )
+      
+    } catch (error) {
+      throw new BadRequestException(error.message)
+    }
+  }
 
   @Public()
   @Post('/signup')

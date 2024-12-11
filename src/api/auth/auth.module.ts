@@ -10,15 +10,16 @@ import { SmsService } from 'src/services/sms.service'
 import { AuthController } from './auth.controller'
 import { AuthService } from './auth.service'
 import { GitHubStrategy } from './github.strategy'
+import { GoogleStrategy } from './google.strategy'
 
 @Global()
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    PassportModule.register({ defaultStrategy: 'github' }),
+    PassportModule.register({ defaultStrategy: ['github', 'google'] }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, SmsService, GitHubStrategy, EmailService],
+  providers: [AuthService, SmsService, GitHubStrategy, GoogleStrategy, EmailService],
   exports: [AuthService],
 })
 export class AuthModule {}
