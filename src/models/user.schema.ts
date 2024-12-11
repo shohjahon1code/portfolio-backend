@@ -59,7 +59,7 @@ export class User {
   @Prop()
   bio?: string
 
-  @Prop({ unique: true })
+  @Prop()
   username?: string
 
   @Prop()
