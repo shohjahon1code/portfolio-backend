@@ -10,6 +10,8 @@ services:
     ports:
       - '3000:3000'
     env_file: .env
+    volumes:
+      - ./uploads:/usr/src/app/uploads
     depends_on:
       - mongo
 
@@ -23,7 +25,3 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: example
     volumes:
       - mongo-data:/data/db
-      - ./uploads:/usr/src/app/uploads
-
-volumes:
-  mongo-data:
