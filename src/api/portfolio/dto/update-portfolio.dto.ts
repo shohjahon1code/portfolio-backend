@@ -25,9 +25,15 @@ class SkillDTO {
   })
   logo: string
 
-  @IsString()
-  @ApiProperty({ example: 'Frontend' })
-  category: string
+  @IsArray()
+  @IsObjectId({ each: true })
+  @Transform(({ obj }) =>
+    obj.category.map((id: string) => new Types.ObjectId(id)),
+  )
+  @ApiProperty({
+    example: ['672f0fd67303b18cfb20e53c', '873f1dc27304b29dfc21f64d'],
+  })
+  category: string[]
 
   @IsString()
   @ApiProperty({ example: 'Expert' })
