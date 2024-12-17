@@ -63,7 +63,7 @@ export class PortfolioResponseDTO {
 
   @Expose()
   @Type(() => CategoryDTO)
-  category: CategoryDTO
+  category: CategoryDTO[]
 
   @Expose()
   @Type(() => UserDTO)
