@@ -6,12 +6,16 @@ import {
   NotFoundException,
   Post,
   Req,
+  Res,
   UseGuards,
 } from '@nestjs/common'
+import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { AuthGuard } from '@nestjs/passport'
 import { ApiTags } from '@nestjs/swagger'
-import axios from 'axios'
+import { Request, Response } from 'express'
+
+import { UserDocument } from 'src/models/user.schema'
 
 import { Public } from 'src/common/decarators/public.decarator'
 import { ResponseDTO } from 'src/common/decarators/response.decarator'
@@ -19,13 +23,70 @@ import { ResponseDTO } from 'src/common/decarators/response.decarator'
 import { AuthService } from './auth.service'
 import { SignInDTO, SignInResponseDTO, SignUpDTO } from './dto/singin.dto'
 
+interface ForGoogleRequest extends Request {
+  user?: {
+    firstName: string
+    lastName: string
+    email: string
+    picture: string
+  }
+}
+
 @ApiTags('Auth')
 @Controller('/api/auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
+
+  @Public()
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  async googleAuth() {}
+
+  @Public()
+  @Get('google/callback')
+  @UseGuards(AuthGuard('google'))
+  async googleAuthRedirect(@Req() req: ForGoogleRequest, @Res() res: Response) {
+    try {
+      const front_url = this.configService.get<string>('FRONT_URL')
+
+      const token = await this.authService.signUpGoogle({
+        fio: `${req.user.firstName} ${req.user.lastName}`,
+        email: req.user.email,
+        picture: req.user.picture,
+      })
+
+      res.redirect(`${front_url}?access_token=${token.access_token}`)
+    } catch (error) {
+      throw new BadRequestException(error.message)
+    }
+  }
+
+  @Public()
+  @Get('github')
+  @UseGuards(AuthGuard('github'))
+  async githubAuth() {
+    // Guard redirects to GitHub
+  }
+
+  @Public()
+  @Get('github/callback')
+  @UseGuards(AuthGuard('github'))
+  async githubAuthRedirect(@Req() req: Request, @Res() res: Response) {
+    try {
+      const front_url = this.configService.get<string>('FRONT_URL')
+      const user = req.user as UserDocument
+
+      const token = await this.jwtService.signAsync({ user: user._id })
+
+      res.redirect(`${front_url}?access_token=${token}`)
+    } catch (error) {
+      throw new BadRequestException(error.message)
+    }
+  }
 
   @Public()
   @Post('/signup')
@@ -71,45 +132,5 @@ export class AuthController {
     })
 
     return { data: { access_token } }
-  }
-
-  @Public()
-  @Get('github')
-  @UseGuards(AuthGuard('github'))
-  async githubLogin() {}
-
-  @Public()
-  @Get('github/redirect')
-  @UseGuards(AuthGuard('github'))
-  async githubRedirect(@Req() req) {
-    const code = req.query.code
-
-    // Access token olish
-    const access_token_response = await axios.post(
-      'https://github.com/login/oauth/access_token',
-      {
-        client_id: process.env.GITHUB_CLIENT_ID,
-        client_secret: process.env.GITHUB_CLIENT_SECRET,
-        code,
-      },
-      {
-        headers: {
-          Accept: 'application/json',
-        },
-      },
-    )
-
-    const access_token = access_token_response.data.access_token
-
-    const profile_response = await axios.get('https://api.github.com/user', {
-      headers: {
-        Authorization: `token ${access_token}`,
-      },
-    })
-
-    const profile = profile_response.data
-
-    const user = await this.authService.validateUser(profile)
-    return { message: 'GitHub login successful', user }
   }
 }
