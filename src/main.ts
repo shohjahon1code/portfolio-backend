@@ -11,7 +11,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: {
       credentials: true,
-      origin: 'http://portfolio.shohjahon1code.uz',
+      origin: '*',
     },
   })
   const config_service = app.get<ConfigService>(ConfigService)
