@@ -36,8 +36,8 @@ export class Portfolio {
   @Prop()
   description?: string
 
-  @Prop({ type: Types.ObjectId, ref: 'Category' })
-  category: Types.ObjectId
+  @Prop({ type: [Types.ObjectId], ref: 'Category' })
+  category: Types.ObjectId[]
 
   @Prop({ type: [String] })
   images?: string[]

@@ -13,7 +13,6 @@ import { IsObjectId } from 'nestjs-object-id'
 
 import { PortfolioType } from 'src/models/portfolio.schema'
 
-// Define a separate class for skills
 export class Skill {
   @IsString()
   @ApiProperty({ example: 'React' })
@@ -48,10 +47,15 @@ export class CreatePortfolioDTO {
   @IsString()
   description: string
 
-  @IsObjectId()
-  @Transform(({ obj }) => new Types.ObjectId(obj.category))
-  @ApiProperty({ example: '672f0fd67303b18cfb20e53c' })
-  category: string
+  @IsArray()
+  @IsObjectId({ each: true })
+  @Transform(({ obj }) =>
+    obj.category.map((id: string) => new Types.ObjectId(id)),
+  )
+  @ApiProperty({
+    example: ['672f0fd67303b18cfb20e53c', '873f1dc27304b29dfc21f64d'],
+  })
+  category: string[]
 
   @IsArray()
   @IsString({ each: true })
@@ -68,7 +72,7 @@ export class CreatePortfolioDTO {
 
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => Skill) // Required for class-transformer to deserialize objects
+  @Type(() => Skill)
   skills: Skill[]
 
   @IsEnum(PortfolioType)
