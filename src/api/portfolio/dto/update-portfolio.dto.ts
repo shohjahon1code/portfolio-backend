@@ -84,7 +84,7 @@ export class UpdatePortfolioDTO {
 
   @IsString()
   @IsOptional()
-  @ApiProperty({ example: 'https://example.com/video.mp4' })
+  @ApiProperty({ example: 'https://example.com/videos.mp4' })
   video_url: string
 
   @IsOptional()
