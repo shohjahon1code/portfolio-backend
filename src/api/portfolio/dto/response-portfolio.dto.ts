@@ -87,4 +87,10 @@ export class PortfolioResponseDTO {
 
   @Expose()
   type: string
+
+  @Expose()
+  video_url: string
+
+  @Expose()
+  isPublic: boolean
 }

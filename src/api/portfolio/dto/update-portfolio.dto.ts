@@ -81,4 +81,13 @@ export class UpdatePortfolioDTO {
   @IsEnum(PortfolioType)
   @IsOptional()
   type: PortfolioType
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ example: 'https://example.com/video.mp4' })
+  video_url: string
+
+  @IsOptional()
+  @ApiProperty({ example: true })
+  isPublic: boolean
 }
