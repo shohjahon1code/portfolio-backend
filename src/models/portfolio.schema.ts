@@ -75,6 +75,12 @@ export class Portfolio {
 
   @Prop({ type: [{ type: Types.ObjectId, ref: 'User' }] })
   liked_by?: Types.ObjectId[]
+
+  @Prop()
+  video_url?: string
+
+  @Prop({ type: Boolean, default: true })
+  isPublic: boolean
 }
 
 export const PortfolioSchema = SchemaFactory.createForClass(Portfolio)
