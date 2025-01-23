@@ -15,6 +15,7 @@ import { UserDocument } from 'src/models/user.schema'
 import { ResponseDTO } from 'src/common/decarators/response.decarator'
 import { User } from 'src/common/decarators/user.decarator'
 
+import { Public } from '../../common/decarators/public.decarator'
 import { UserProfileResponseDTO } from './dto/profile-response.dto'
 import { ChangePasswordDTO, UpdateProfileDTO } from './dto/update-profile.dto'
 import { ProfileService } from './profile.service'
@@ -24,6 +25,14 @@ import { ProfileService } from './profile.service'
 @Controller('api/profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
+
+  @Public()
+  @Get('/all')
+  async getAllUsers() {
+    const users = await this.profileService.getAllUsers()
+
+    return { data: users }
+  }
 
   @Get('/me')
   @ResponseDTO(UserProfileResponseDTO)

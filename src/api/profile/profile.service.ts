@@ -14,6 +14,11 @@ export class ProfileService {
     private readonly userModel: Model<UserDocument>,
   ) {}
 
+  async getAllUsers() {
+    const users = await this.userModel.find().exec()
+    return users
+  }
+
   async getMe(user: UserDocument) {
     const profile = await this.userModel.findById(user._id)
 
